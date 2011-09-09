@@ -78,7 +78,7 @@ public class HttpServletResponseCapture extends HttpServletResponseWrapper {
         }
     }
 
-    boolean isError() {
+    public boolean isError() {
         return status >= 400;
     }
 }

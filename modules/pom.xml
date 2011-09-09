@@ -19,12 +19,16 @@
     <module>cache</module>
     <module>services</module>
     <module>web</module>
+    <module>clojure-core</module>
+    <module>clojure-web</module>
     <module>messaging</module>
     <module>jobs</module>
 
     <module>cdi</module>
     <module>security</module>
     <module>stomp</module>
+
+
   </modules>
 
   <dependencies>

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.torquebox.web.as;
+package org.torquebox.clojure.web.as;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIPTION;
@@ -44,7 +44,7 @@ public class WebSubsystemProviders {
             final ResourceBundle bundle = getResourceBundle(locale);
 
             final ModelNode subsystem = new ModelNode();
-            subsystem.get(DESCRIPTION).set(bundle.getString("torquebox-web"));
+            subsystem.get(DESCRIPTION).set(bundle.getString("torquebox-clojure-web"));
             subsystem.get(HEAD_COMMENT_ALLOWED).set(true);
             subsystem.get(TAIL_COMMENT_ALLOWED).set(true);
             subsystem.get(NAMESPACE).set(Namespace.CURRENT.getUriString());
@@ -60,7 +60,7 @@ public class WebSubsystemProviders {
             final ModelNode operation = new ModelNode();
 
             operation.get(OPERATION_NAME).set(ADD);
-            operation.get(DESCRIPTION).set(bundle.getString("torquebox-web.add"));
+            operation.get(DESCRIPTION).set(bundle.getString("torquebox-clojure-web.add"));
             operation.get(REQUEST_PROPERTIES).setEmptyObject();
             operation.get(REPLY_PROPERTIES).setEmptyObject();
 

@@ -33,7 +33,7 @@ import org.torquebox.clojure.web.ring.RingApplicationMetaData;
 
 public class WebDependenciesProcessor implements DeploymentUnitProcessor {
     
-    private static ModuleIdentifier TORQUEBOX_CLOJURE_WEB_ID = ModuleIdentifier.create("org.torquebox.clojure.web");
+    private static ModuleIdentifier TORQUEBOX_CLOJURE_WEB_ID = ModuleIdentifier.create("org.torquebox.clojure-web");
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {

@@ -30,7 +30,6 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.deployment.module.MountHandle;
 import org.jboss.as.server.deployment.module.ResourceRoot;
-import org.jboss.logging.Logger;
 import org.jboss.vfs.VFS;
 import org.jboss.vfs.VFSUtils;
 import org.jboss.vfs.VirtualFile;
@@ -49,7 +48,7 @@ public class CljRootMountProcessor implements DeploymentUnitProcessor {
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-        log.info( "TOBY: in CljRootMountProcessor" );
+
         if (deploymentUnit.getAttachment( Attachments.DEPLOYMENT_ROOT ) != null) {
             return;
         }
@@ -68,14 +67,6 @@ public class CljRootMountProcessor implements DeploymentUnitProcessor {
             ResourceRoot expandedResourceRoot = new ResourceRoot( realRoot, handle );
             deploymentUnit.putAttachment( Attachments.DEPLOYMENT_ROOT, expandedResourceRoot );
             deploymentUnit.putAttachment( Attachments.MODULE_SPECIFICATION, new ModuleSpecification() );
-            
-            //hack
-//            deploymentUnit.putAttachment( Attachments.DEPLOYMENT_ROOT, new ResourceRoot( VFS.getChild( "/Users/tobias/w/test-apps/ring/basic-ring/" ), null ) );
-//            ClojureApplicationMetaData appMetaData = new ClojureApplicationMetaData( "basic-ring" );
-//            deploymentUnit.putAttachment( ClojureApplicationMetaData.ATTACHMENT_KEY, appMetaData );
-//            RingApplicationMetaData ringMetaData = new RingApplicationMetaData();
-//            deploymentUnit.putAttachment( RingApplicationMetaData.ATTACHMENT_KEY, ringMetaData );
-            
         } catch (IOException e) {
             throw new DeploymentUnitProcessingException( e );
         }
@@ -90,5 +81,5 @@ public class CljRootMountProcessor implements DeploymentUnitProcessor {
     protected Closeable getKnobCloseable() {
         return knobCloseable;
     }
-    static final Logger log = Logger.getLogger( "org.torquebox.clojure.core.as" );
+
 }

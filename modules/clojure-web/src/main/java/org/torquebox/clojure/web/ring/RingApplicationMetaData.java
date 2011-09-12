@@ -23,13 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.as.server.deployment.AttachmentKey;
+import org.torquebox.clojure.core.ClojureApplicationMetaData;
 
 public class RingApplicationMetaData {
 
     public static final AttachmentKey<RingApplicationMetaData> ATTACHMENT_KEY = AttachmentKey.create(RingApplicationMetaData.class);
     
-    public RingApplicationMetaData() {
-
+    public RingApplicationMetaData(ClojureApplicationMetaData appMetaData) {
+        this.appMetaData = appMetaData;
     }
 
     public void addHost(String host) {
@@ -46,7 +47,7 @@ public class RingApplicationMetaData {
     }
 
     public String getContextPath() {
-        return this.contextPath;
+        return this.appMetaData.getString( "context-path" );
     }
 
     public String toString() {
@@ -54,6 +55,7 @@ public class RingApplicationMetaData {
     }
 
     
+    private ClojureApplicationMetaData appMetaData;
     private List<String> hosts = new ArrayList<String>();
     private String contextPath = "/";
 }

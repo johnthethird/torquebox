@@ -60,6 +60,7 @@ class CoreSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
     protected void addDeploymentProcessors(final DeploymentProcessorTarget processorTarget) {
         processorTarget.addDeploymentProcessor( Phase.STRUCTURE, 0, new CljRootMountProcessor() );
+        processorTarget.addDeploymentProcessor( Phase.STRUCTURE, 20, new AppCljParsingProcessor() );
         processorTarget.addDeploymentProcessor( Phase.STRUCTURE, 100, new AppJarScanningProcessor() );
 
         //processorTarget.addDeploymentProcessor( Phase.PARSE, 0, new RingApplicationRecognizer() );

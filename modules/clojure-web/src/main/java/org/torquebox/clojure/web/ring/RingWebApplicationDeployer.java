@@ -54,6 +54,7 @@ import org.jboss.metadata.web.spec.ServletMappingMetaData;
 import org.jboss.metadata.web.spec.WebFragmentMetaData;
 import org.jboss.metadata.web.spec.WebMetaData;
 import org.jboss.msc.service.ServiceName;
+import org.torquebox.clojure.core.ClojureApplicationMetaData;
 import org.torquebox.clojure.web.servlet.RingFilter;
 
 /**
@@ -74,7 +75,7 @@ public class RingWebApplicationDeployer implements DeploymentUnitProcessor {
     public static final String STATIC_RESOURCE_SERVLET_CLASS_NAME = "org.torquebox.web.servlet.StaticResourceServlet";
 
     public static final String FIVE_HUNDRED_SERVLET_NAME = "torquebox.500";
-    public static final String FIVE_HUNDRED_SERVLET_CLASS_NAME = "org.torquebox.clojureweb.servlet.FiveHundredServlet";
+    public static final String FIVE_HUNDRED_SERVLET_CLASS_NAME = "org.torquebox.clojure.web.servlet.FiveHundredServlet";
 
     public static final String LOCALHOST_MBEAN_NAME = "jboss.web:host=localhost,type=Host";
 
@@ -85,15 +86,20 @@ public class RingWebApplicationDeployer implements DeploymentUnitProcessor {
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        
+        //FIXME fuck me, this entire method needs a refactoring - it's doing way too much
+        
         DeploymentUnit unit = phaseContext.getDeploymentUnit();
         ResourceRoot resourceRoot = unit.getAttachment( Attachments.DEPLOYMENT_ROOT );
 
-        RingApplicationMetaData appMetaData = unit.getAttachment( RingApplicationMetaData.ATTACHMENT_KEY );
+        RingApplicationMetaData ringMetaData = unit.getAttachment( RingApplicationMetaData.ATTACHMENT_KEY );
 
-        if (appMetaData == null) {
+        if (ringMetaData == null) {
             return;
         }
 
+        ClojureApplicationMetaData appMetaData = unit.getAttachment( ClojureApplicationMetaData.ATTACHMENT_KEY );
+        
         DeploymentTypeMarker.setType( DeploymentType.WAR, unit );
         WarMetaData warMetaData = new WarMetaData();
         
@@ -148,24 +154,25 @@ public class RingWebApplicationDeployer implements DeploymentUnitProcessor {
         }
         
         setUpMimeTypes( jbossWebMetaData );
-        setUpRingFilter( unit, appMetaData, jbossWebMetaData );
+        setUpRingFilter( unit, ringMetaData, jbossWebMetaData );
         //setUpStaticResourceServlet( appMetaData, jbossWebMetaData );
-        ensureSomeServlet( appMetaData, jbossWebMetaData );
+        ensureSomeServlet( ringMetaData, jbossWebMetaData );
         try {
-            setUpHostAndContext( unit, appMetaData, warMetaData, jbossWebMetaData );
+            setUpHostAndContext( unit, ringMetaData, warMetaData, jbossWebMetaData );
         } catch (Exception e) {
             throw new DeploymentUnitProcessingException( e );
         }
 
-        jbossWebMetaData.setVirtualHosts( appMetaData.getHosts() );
+        jbossWebMetaData.setVirtualHosts( ringMetaData.getHosts() );
 
-        ServletContextAttribute scriptName = new ServletContextAttribute( RingFilter.CLOJURE_SCRIPT_NAME, "/Users/tobias/w/test-apps/ring/basic-ring/src/basic_ring/core.clj" );
+        ServletContextAttribute scriptName = new ServletContextAttribute( RingFilter.CLOJURE_SCRIPT_NAME, appMetaData.getRootPath() + "/" + appMetaData.getScript() );
+              //"/Users/tobias/w/test-apps/ring/basic-ring/src/basic_ring/core.clj" );
         unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, scriptName );
         
-        ServletContextAttribute namespace = new ServletContextAttribute( RingFilter.CLOJURE_NAMESPACE, "basic-ring.core" );
+        ServletContextAttribute namespace = new ServletContextAttribute( RingFilter.CLOJURE_NAMESPACE, appMetaData.getNamespace() ); //"basic-ring.core" );
         unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, namespace );
         
-        ServletContextAttribute functionName = new ServletContextAttribute( RingFilter.CLOJURE_APP_FUNCTION_NAME, "torquebox-handler" );
+        ServletContextAttribute functionName = new ServletContextAttribute( RingFilter.CLOJURE_APP_FUNCTION_NAME, appMetaData.getAppFunction() ); //"torquebox-handler" );
         unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, functionName );
 
     }

@@ -33,7 +33,7 @@ import org.torquebox.clojure.core.ClojureApplicationMetaData;
 
 public class CoreDependenciesProcessor implements DeploymentUnitProcessor {
     
-    private static ModuleIdentifier TORQUEBOX_CLOJURE_CORE_ID = ModuleIdentifier.create("org.torquebox.clojure.core");
+    private static ModuleIdentifier TORQUEBOX_CLOJURE_CORE_ID = ModuleIdentifier.create("org.torquebox.clojure-core");
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {

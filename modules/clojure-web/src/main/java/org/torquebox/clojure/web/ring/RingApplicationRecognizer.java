@@ -19,13 +19,11 @@
 
 package org.torquebox.clojure.web.ring;
 
-import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
-import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.logging.Logger;
-import org.jboss.vfs.VirtualFile;
+import org.torquebox.clojure.core.ClojureApplicationMetaData;
 import org.torquebox.core.FileLocatingProcessor;
 
 public class RingApplicationRecognizer extends FileLocatingProcessor {
@@ -38,9 +36,17 @@ public class RingApplicationRecognizer extends FileLocatingProcessor {
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         DeploymentUnit unit = phaseContext.getDeploymentUnit();
-        ResourceRoot resourceRoot = unit.getAttachment( Attachments.DEPLOYMENT_ROOT );
-        VirtualFile root = resourceRoot.getRoot();
+        //ResourceRoot resourceRoot = unit.getAttachment( Attachments.DEPLOYMENT_ROOT );
+        //VirtualFile root = resourceRoot.getRoot();
 
+        ClojureApplicationMetaData appMetaData = unit.getAttachment( ClojureApplicationMetaData.ATTACHMENT_KEY );
+          
+        if (appMetaData != null) {
+        //FIXME: for now, we assume everything is a ring app
+            RingApplicationMetaData ringMetaData = new RingApplicationMetaData( appMetaData );
+            unit.putAttachment( RingApplicationMetaData.ATTACHMENT_KEY, ringMetaData );
+        }
+         
 //        if (isRackApplication( root )) {
 //            RingApplicationMetaData ringAppMetaData = unit.getAttachment( RingApplicationMetaData.ATTACHMENT_KEY );
 //

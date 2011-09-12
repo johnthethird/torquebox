@@ -39,7 +39,6 @@ import org.jboss.vfs.VirtualFile;
 import org.jboss.vfs.VirtualFileFilter;
 import org.jboss.vfs.VisitorAttributes;
 import org.jboss.vfs.util.SuffixMatchFilter;
-import org.torquebox.clojure.core.as.CljRootMountProcessor;
 import org.torquebox.core.as.KnobDeploymentMarker;
 
 public class AppJarScanningProcessor implements DeploymentUnitProcessor {
@@ -117,6 +116,6 @@ public class AppJarScanningProcessor implements DeploymentUnitProcessor {
     
     public static final VirtualFileFilter JAR_FILTER = new SuffixMatchFilter( ".jar", VisitorAttributes.DEFAULT );
     
-    private static final Logger log = Logger.getLogger( "org.torquebox.clojureweb" );
+    private static final Logger log = Logger.getLogger( "org.torquebox.clojure.core" );
 
 }

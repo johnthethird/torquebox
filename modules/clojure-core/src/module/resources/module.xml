@@ -25,8 +25,8 @@
 <module xmlns="urn:jboss:module:1.0" name="org.torquebox.clojure-core">
 
     <resources>
-        <resource-root path="${project.artifactId}-${project.version}.jar"/>
-        <resource-root path="clojure-${version.clojure}.jar"/>
+        <resource-root path="${project.artifactId}.jar"/>
+        <resource-root path="clojure.jar"/>
     </resources>
 
     <exports>

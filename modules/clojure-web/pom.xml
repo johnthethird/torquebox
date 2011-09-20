@@ -48,6 +48,12 @@
     </dependency>
 
     <dependency>
+      <groupId>ring</groupId>
+      <artifactId>ring-servlet</artifactId>
+      <version>${version.ring-servlet}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.web</groupId>
       <artifactId>jbossweb</artifactId>
       <scope>provided</scope>

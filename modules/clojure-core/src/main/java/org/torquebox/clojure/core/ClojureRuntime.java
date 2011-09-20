@@ -24,9 +24,17 @@ public class ClojureRuntime {
     }
    
     public Object invoke(String namespace, String function, Object... args) {
-        Object func = callStatic( getRuntime(), "var", namespace, function );
+        Object func = var( namespace, function );
         
+        return invoke( func, args );
+    }
+    
+    public Object invoke(Object func, Object... args) {
         return call( func, "invoke", args );
+    }
+    
+    public Object var(String namespace, String varName) {
+        return callStatic( getRuntime(), "var", namespace, varName );   
     }
     
     protected Object callStatic(Class klass, String methodName, Object... args) {

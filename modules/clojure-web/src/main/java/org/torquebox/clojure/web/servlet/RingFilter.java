@@ -105,7 +105,8 @@ public class RingFilter implements Filter {
     protected void doRing(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
        try { 
            this.runtime.load( this.scriptName );
-           this.runtime.invoke( this.namespace, this.appFunctionName, request, response );
+           this.runtime.load( "torquebox/web" ); //this may not be necessary 
+           this.runtime.invoke( "torquebox.web", "handle-request", this.namespace, this.appFunctionName, request, response );
        } catch (Exception e) {
             log.error( "Error invoking Ring filter", e );
             throw new ServletException( e );

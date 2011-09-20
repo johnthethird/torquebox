@@ -186,6 +186,7 @@ public class ClojureApplicationMetaData {
         } finally {
             Thread.currentThread().setContextClassLoader( originalCl );
         }
+        
     }
 
     private Map<String, ?> config;

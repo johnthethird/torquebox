@@ -135,7 +135,8 @@ class CoreSubsystemAdd extends AbstractBoottimeAddStepHandler {
                                    List<ServiceController<?>> newControllers, 
                                    InjectableHandlerRegistry registry) throws Exception {
         addTorqueBoxService( context, verificationHandler, newControllers, registry );
-        addGlobalRubyServices( context, verificationHandler, newControllers, registry );
+        //FIXME: disabled to speed up clojure only usage
+        //addGlobalRubyServices( context, verificationHandler, newControllers, registry );
         addInjectionServices( context, verificationHandler, newControllers, registry );
     }
 

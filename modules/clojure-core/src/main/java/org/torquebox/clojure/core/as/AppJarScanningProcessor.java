@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.torquebox.clojure.core;
+package org.torquebox.clojure.core.as;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -39,6 +39,7 @@ import org.jboss.vfs.VirtualFile;
 import org.jboss.vfs.VirtualFileFilter;
 import org.jboss.vfs.VisitorAttributes;
 import org.jboss.vfs.util.SuffixMatchFilter;
+import org.torquebox.clojure.core.ClojureApplicationMetaData;
 import org.torquebox.core.as.KnobDeploymentMarker;
 
 public class AppJarScanningProcessor implements DeploymentUnitProcessor {
@@ -61,13 +62,11 @@ public class AppJarScanningProcessor implements DeploymentUnitProcessor {
             for (String scanRoot : SCAN_ROOTS) {
                 for (VirtualFile child : getJarFiles( root.getChild( scanRoot ) )) {
                     System.out.println( "child: " + child.getName() );
-                    if (!child.getName().startsWith( "clojure-" )) {
-                        final Closeable closable = child.isFile() ? mount( child, false ) : null;
-                        final MountHandle mountHandle = new MountHandle( closable );
-                        final ResourceRoot childResource = new ResourceRoot( child, mountHandle );
-                        ModuleRootMarker.mark(childResource);
-                        unit.addToAttachmentList( Attachments.RESOURCE_ROOTS, childResource );
-                    }
+                    final Closeable closable = child.isFile() ? mount( child, false ) : null;
+                    final MountHandle mountHandle = new MountHandle( closable );
+                    final ResourceRoot childResource = new ResourceRoot( child, mountHandle );
+                    ModuleRootMarker.mark(childResource);
+                    unit.addToAttachmentList( Attachments.RESOURCE_ROOTS, childResource );
                 }
             }
 
@@ -77,10 +76,12 @@ public class AppJarScanningProcessor implements DeploymentUnitProcessor {
                 ModuleRootMarker.mark(childResource);
                 unit.addToAttachmentList( Attachments.RESOURCE_ROOTS, childResource );
             }
+            
         } catch (IOException e) {
             log.error( "Error processing jars", e );
         }
 
+        
     }
     
     public List<VirtualFile> getJarFiles(VirtualFile dir) throws IOException {
@@ -91,7 +92,7 @@ public class AppJarScanningProcessor implements DeploymentUnitProcessor {
         return explode ? VFS.mountZipExpanded( moduleFile, moduleFile, TempFileProviderService.provider() )
                        : VFS.mountZip( moduleFile, moduleFile, TempFileProviderService.provider() );
     }
-
+    
     @Override
     public void undeploy(DeploymentUnit context) {
         

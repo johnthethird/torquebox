@@ -32,12 +32,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 
-import org.torquebox.clojure.core.ClojureUtil;
+import org.torquebox.clojure.core.ClojureRuntime;
 import org.torquebox.web.servlet.HttpServletResponseCapture;
 
 public class RingFilter implements Filter {
-
+    public static final String RING_APP_DEPLOYMENT_INIT_PARAM = "torquebox.ring.app.deployment.name";
+    public static final String CLOJURE_SCRIPT_NAME = "clojure.script.name";
+    public static final String CLOJURE_NAMESPACE = "clojure.namespace";
+    public static final String CLOJURE_APP_FUNCTION_NAME = "clojure.app.function.name";
+    public static final String CLOJURE_RUNTIME = "clojure.runtime";
+    
     public void init(FilterConfig filterConfig) throws ServletException {
+        this.runtime = (ClojureRuntime)filterConfig.getServletContext().getAttribute( CLOJURE_RUNTIME );
         this.scriptName = (String)filterConfig.getServletContext().getAttribute( CLOJURE_SCRIPT_NAME );
         this.namespace = (String)filterConfig.getServletContext().getAttribute( CLOJURE_NAMESPACE );
         this.appFunctionName = (String)filterConfig.getServletContext().getAttribute( CLOJURE_APP_FUNCTION_NAME );
@@ -98,21 +104,20 @@ public class RingFilter implements Filter {
 
     protected void doRing(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
        try { 
-           ClojureUtil.loadAndInvoke( this.scriptName, this.namespace, this.appFunctionName, request, response );
+           this.runtime.load( this.scriptName );
+           this.runtime.invoke( this.namespace, this.appFunctionName, request, response );
        } catch (Exception e) {
             log.error( "Error invoking Ring filter", e );
             throw new ServletException( e );
         }
     }
 
+    private ClojureRuntime runtime;
     private String scriptName;
     private String namespace;
     private String appFunctionName;
     
     private static final Logger log = Logger.getLogger( RingFilter.class );
 
-    public static final String RING_APP_DEPLOYMENT_INIT_PARAM = "torquebox.ring.app.deployment.name";
-    public static final String CLOJURE_SCRIPT_NAME = "clojure.script.name";
-    public static final String CLOJURE_NAMESPACE = "clojure.namespace";
-    public static final String CLOJURE_APP_FUNCTION_NAME = "clojure.app.function.name";
+   
 }

@@ -35,7 +35,6 @@ import org.jboss.as.server.deployment.Phase;
 import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
 import org.jboss.msc.service.ServiceController;
-import org.torquebox.clojure.core.AppJarScanningProcessor;
 
 class CoreSubsystemAdd extends AbstractBoottimeAddStepHandler {
     
@@ -79,7 +78,7 @@ class CoreSubsystemAdd extends AbstractBoottimeAddStepHandler {
         //processorTarget.addDeploymentProcessor( Phase.CONFIGURE_MODULE, 500, new RailsAutoloadPathProcessor() );
         
         //processorTarget.addDeploymentProcessor( Phase.POST_MODULE, 120, new RackApplicationComponentResolverInstaller() );
-        //processorTarget.addDeploymentProcessor( Phase.INSTALL, 2100, new VirtualHostInstaller() );
+        processorTarget.addDeploymentProcessor( Phase.POST_MODULE, 120, new ClojureRuntimeInstaller() );
     }
 
 

@@ -55,6 +55,7 @@ import org.jboss.metadata.web.spec.WebFragmentMetaData;
 import org.jboss.metadata.web.spec.WebMetaData;
 import org.jboss.msc.service.ServiceName;
 import org.torquebox.clojure.core.ClojureApplicationMetaData;
+import org.torquebox.clojure.core.ClojureRuntime;
 import org.torquebox.clojure.web.servlet.RingFilter;
 
 /**
@@ -164,10 +165,9 @@ public class RingWebApplicationDeployer implements DeploymentUnitProcessor {
         }
 
         jbossWebMetaData.setVirtualHosts( ringMetaData.getHosts() );
-
-        ServletContextAttribute scriptName = new ServletContextAttribute( RingFilter.CLOJURE_SCRIPT_NAME, appMetaData.getRootPath() + "/" + appMetaData.getScript() );
-              //"/Users/tobias/w/test-apps/ring/basic-ring/src/basic_ring/core.clj" );
-        unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, scriptName );
+        
+        ServletContextAttribute scriptName = new ServletContextAttribute( RingFilter.CLOJURE_SCRIPT_NAME, appMetaData.getScript() );
+         unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, scriptName );
         
         ServletContextAttribute namespace = new ServletContextAttribute( RingFilter.CLOJURE_NAMESPACE, appMetaData.getNamespace() ); //"basic-ring.core" );
         unit.addToAttachmentList( ServletContextAttribute.ATTACHMENT_KEY, namespace );

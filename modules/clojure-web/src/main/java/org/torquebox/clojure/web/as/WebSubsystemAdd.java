@@ -36,6 +36,7 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
 import org.jboss.msc.service.ServiceController;
 import org.torquebox.clojure.web.ring.RingApplicationRecognizer;
+import org.torquebox.clojure.web.ring.RingFilterClojureRuntimeInstaller;
 import org.torquebox.clojure.web.ring.RingWebApplicationDeployer;
 
 class WebSubsystemAdd extends AbstractBoottimeAddStepHandler {
@@ -76,6 +77,7 @@ class WebSubsystemAdd extends AbstractBoottimeAddStepHandler {
         //processorTarget.addDeploymentProcessor( Phase.CONFIGURE_MODULE, 500, new RailsAutoloadPathProcessor() );
         
         //processorTarget.addDeploymentProcessor( Phase.POST_MODULE, 120, new RackApplicationComponentResolverInstaller() );
+        processorTarget.addDeploymentProcessor( Phase.INSTALL, 1, new RingFilterClojureRuntimeInstaller() );
         //processorTarget.addDeploymentProcessor( Phase.INSTALL, 2100, new VirtualHostInstaller() );
     }
 

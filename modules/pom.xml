@@ -69,6 +69,11 @@
           <include>**/*</include>
         </includes>
       </resource>
+
+      <resource>
+        <directory>src/main/clojure</directory>
+      </resource>
+
     </resources>
     <testResources>
       <testResource>

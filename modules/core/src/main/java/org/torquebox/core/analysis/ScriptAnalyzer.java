@@ -21,6 +21,8 @@ package org.torquebox.core.analysis;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.jboss.vfs.VirtualFile;
 import org.jruby.CompatVersion;
@@ -131,18 +133,29 @@ public class ScriptAnalyzer {
      * @return The result provided by the specific <code>NodeVisitor</code>.
      */
     public void analyze(String filename, String script, NodeVisitor visitor, Version rubyVersion) {
-        StaticScope staticScope = new LocalStaticScope( null );
-        DynamicScope scope = new ManyVarsDynamicScope( staticScope );
-        Ruby analyzingRuby = null;
+        try {
+            Constructor<LocalStaticScope> constructor = LocalStaticScope.class.getDeclaredConstructor( StaticScope.class );
+            constructor.setAccessible( true );
+            StaticScope staticScope = constructor.newInstance( new Object[] { null } );
+            //        StaticScope staticScope = new LocalStaticScope( null );
+            DynamicScope scope = new ManyVarsDynamicScope( staticScope );
+            Ruby analyzingRuby = null;
 
-        if (rubyVersion.equals( Version.V1_8 )) {
-            analyzingRuby = this.ruby18;
-        } else if (rubyVersion.equals( Version.V1_9 )) {
-            analyzingRuby = this.ruby19;
+            if (rubyVersion.equals( Version.V1_8 )) {
+                analyzingRuby = this.ruby18;
+            } else if (rubyVersion.equals( Version.V1_9 )) {
+                analyzingRuby = this.ruby19;
+            }
+
+            Node result = analyzingRuby.parseEval( script, filename, scope, 0 );
+            result.accept( visitor );
         }
-
-        Node result = analyzingRuby.parseEval( script, filename, scope, 0 );
-        result.accept( visitor );
+        // Catch the reflection-related exceptions until LocalStaticScope's
+        // constructor is public again
+        catch (NoSuchMethodException e) {}
+        catch (InvocationTargetException e) {}
+        catch (IllegalAccessException e) {}
+        catch (InstantiationException e) {}
     }
 
     /**

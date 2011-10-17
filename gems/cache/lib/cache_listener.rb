@@ -14,6 +14,7 @@
 # License along with this software; if not, write to the Free
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+require 'jruby/core_ext'
 
 module TorqueBox
   module Infinispan
@@ -29,7 +30,7 @@ module TorqueBox
         end
       end
 
-      add_class_annotation( { org.infinispan.notifications.Listener => { } } )
+      add_class_annotations( { org.infinispan.notifications.Listener => { } } )
       add_method_signature( "event_fired", [java.lang.Void::TYPE, org.infinispan.notifications.cachelistener.event.Event.java_class] )
       add_method_annotation( "event_fired", 
                             { org.infinispan.notifications.cachelistener.annotation.CacheEntryCreated => {},

@@ -9,7 +9,8 @@ remote_describe "rake tasks" do
   end
 
   def rake(cmd)
-    `#{jruby_binary} -S rake -f #{File.dirname(__FILE__)}/../apps/rails3.1/basic/Rakefile #{cmd} 2>&1`
+    full_cmd = "#{jruby_binary} -S rake -f #{File.dirname(__FILE__)}/../apps/rails3.1/basic/Rakefile #{cmd} 2>&1"
+    `#{full_cmd}`
   end
 
 end
